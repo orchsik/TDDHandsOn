@@ -8,7 +8,8 @@ refineText = (s, bannedWorlds = []) => {
     .replace("\t ", " ");
 
   bannedWorlds.forEach((bannedWorld) => {
-    s = s.replace(bannedWorld, "********");
+    // console.log("@@@", { bannedWorld, re: "*".repeat(bannedWorld.length) });
+    s = s.replace(bannedWorld, "*".repeat(bannedWorld.length));
   });
 
   return s;

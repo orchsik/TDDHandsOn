@@ -1,3 +1,4 @@
+const chance = require("chance").Chance();
 const sut = require("./index");
 
 // #1 ❌중복발생
@@ -58,3 +59,13 @@ test.each([
     expect(actual).toBe(expected);
   }
 );
+
+describe("sut transfrom random banned world", () => {
+  const bannedWorld = chance.string();
+  const source = `hello ${bannedWorld}`;
+  const expected = "hello " + "*".repeat(bannedWorld.length);
+  test(`sut transfrom "${source}" to "hello ${expected}"`, () => {
+    const actual = sut(source, [bannedWorld]);
+    expect(actual).toBe(expected);
+  });
+});
