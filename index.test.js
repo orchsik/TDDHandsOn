@@ -25,10 +25,36 @@ const sut = require("./index");
 
 // #3 ✅.each 사용으로 테스트 source 명세 구체화
 test.each([
-  { source: "hello  world" },
-  { source: "hello    world" },
-  { source: "hello     world" },
-])(`sut transforms "$source" correctly`, ({ source }) => {
+  { source: "hello world", expected: "hello world" },
+  { source: "hello  world", expected: "hello world" },
+  { source: "hello   world", expected: "hello world" },
+  { source: "hello    world", expected: "hello world" },
+  { source: "hello     world", expected: "hello world" },
+])(`sut transforms "$source" to "$expected"`, ({ source, expected }) => {
   const actual = sut(source);
-  expect(actual).toBe("hello world");
+  expect(actual).toBe(expected);
 });
+
+test.each([
+  { source: "hello\t world", expected: "hello world" },
+  { source: "hello \tworld", expected: "hello world" },
+])(
+  `sut transforms "$source" contains tab chracter to "$expected"`,
+  ({ source, expected }) => {
+    expect(sut(source)).toBe(expected);
+  }
+);
+
+test.each([
+  {
+    source: "hello superman world",
+    bannedWorlds: ["superman"],
+    expected: "hello ******** world",
+  },
+])(
+  `sut transforms "$source" contains banned word to "$expeceted`,
+  ({ source, bannedWorlds, expected }) => {
+    const actual = sut(source, bannedWorlds);
+    expect(actual).toBe(expected);
+  }
+);
